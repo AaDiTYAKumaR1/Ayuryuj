@@ -15,7 +15,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "googleServicesFile": "./google-services.json",
+      "package": "com.aditya014.Ayuryuj"
     },
     "web": {
       "bundler": "metro",
@@ -32,13 +34,21 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
-      // ,
-      // "@react-native-firebase/app",
-      //  "@react-native-firebase/auth"
+      ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "expo-build-properties"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "b37ceda4-303a-45ef-84f6-c8e0d632a059"
+      }
     }
   }
 }

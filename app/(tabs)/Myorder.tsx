@@ -1,87 +1,106 @@
-import { View, Text,Image, StyleSheet, FlatList, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import React from 'react';
+import { useUser, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
-import { Collapsible } from '@/components/CustomDrawerContent';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-const orders = [
-  { id: '1', name: 'Paracetamol', status: 'Delivered', date: 'Feb 6, 2025' },
-  { id: '2', name: 'Cough Syrup', status: 'Shipped', date: 'Feb 7, 2025' },
-  { id: '3', name: 'Aspirin', status: 'Processing', date: 'Feb 8, 2025' },
-];
+import { useRouter } from 'expo-router';
 
-export default function MyOrderScreen() {
+export default function UserProfileScreen() {
+  const { user } = useUser();
+  const router = useRouter();
+  console.log(user)
+
   return (
-     <ParallaxScrollView
-          headerBackgroundColor={{ light: '#E3F2FD', dark: '#1E2A38' }}
-          headerImage={
-           <Image source={ require("../../assets/images/medicineimg.jpeg")} className='w-full h-full' />
-          }>
     <ThemedView style={styles.container}>
-      
-      <View style={styles.header}>
-        <IconSymbol size={40} color="#4CAF50" name="cart" />
-        <ThemedText type="title">My Orders</ThemedText>
-      </View>
+      <SignedIn>
+        <View style={styles.profileHeader}>
+          <Image 
+            source={{ uri: user?.imageUrl || 'https://via.placeholder.com/100' }} 
+            style={styles.avatar} 
+          />
+          <ThemedText type="title">{user?.fullName || 'User'}</ThemedText>
+          <Text style={styles.email}>{user?.emailAddresses[0]?.emailAddress}</Text>
+        </View>
 
-      <FlatList
-        data={orders}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.orderCard}>
-            <ThemedText type="defaultSemiBold">{item.name}</ThemedText>
-            <Text style={styles.orderStatus}>{item.status}</Text>
-            <Text style={styles.orderDate}>{item.date}</Text>
-          </View>
-        )}
-      />
+        <View style={styles.infoCard}>
+          <IconSymbol name="phone" size={20} color="#4CAF50" />
+          <Text style={styles.infoText}>{user?.primaryPhoneNumber || 'Not Provided'}</Text>
+        </View>
 
-      <Collapsible title="Track Order">
-        <ThemedText>
-          You can track your orders and get real-time updates.
-        </ThemedText>
-        <Pressable style={styles.button}>
-          <ThemedText type="buttonText">Track Orders</ThemedText>
+        <View style={styles.infoCard}>
+          <IconSymbol name="user-circle" size={20} color="#4CAF50" />
+          <Text style={styles.infoText}>Member since: {user?.createdAt?.toDateString()}</Text>
+        </View>
+
+        <Pressable style={styles.button} onPress={() => router.push('/EditProfile')}>
+          <Text style={styles.buttonText}>Edit Profile</Text>
         </Pressable>
-      </Collapsible>
 
+        <Pressable style={[styles.button, styles.logoutButton]}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </Pressable>
+      </SignedIn>
+
+      <SignedOut>
+        <Text style={styles.title}>You are not signed in</Text>
+      </SignedOut>
     </ThemedView>
-    </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    flex:1
-  },
-  header: {
-    flexDirection: 'row',
+    flex: 1,
     alignItems: 'center',
-    gap: 10,
-    marginBottom: 16,
+    padding: 20,
   },
-  orderCard: {
-    backgroundColor: '#E8F5E9',
-    padding: 12,
-    borderRadius: 8,
+  profileHeader: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     marginBottom: 10,
   },
-  orderStatus: {
-    fontSize: 14,
-    color: '#388E3C',
+  email: {
+    fontSize: 16,
+    color: '#666',
   },
-  orderDate: {
-    fontSize: 12,
-    color: '#757575',
+  infoCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E8F5E9',
+    padding: 10,
+    borderRadius: 8,
+    marginVertical: 5,
+    width: '100%',
+  },
+  infoText: {
+    fontSize: 16,
+    marginLeft: 10,
   },
   button: {
-    backgroundColor: '#4CAF50',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
+    backgroundColor: '#007bff',
+    padding: 12,
     borderRadius: 8,
+    width: '100%',
     alignItems: 'center',
-    marginTop: 10,
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  logoutButton: {
+    backgroundColor: '#d9534f',
+  },
+  logoutText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

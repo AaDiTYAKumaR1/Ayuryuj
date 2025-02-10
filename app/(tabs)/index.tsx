@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Alert } from 'react-native';
+import React, { useState, useMemo, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import auth from '@react-native-firebase/auth';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 
@@ -15,64 +14,47 @@ import labtest from "../../assets/images/labtest.jpeg";
 import banner from "../../assets/images/banner.jpeg";
 
 export default function HomeScreen() {
-  const [confirm, setConfirm] = useState(null);
 
-  const [code, setCode] = useState('');
   const navigation = useNavigation();
-  const [user, setUser] = useState(null);
 
+  const services = useMemo(() => [
+    { name: "Online Consultations", image: consultant, bgColor: "#60A5FA", screen: "Consult" },
+    { name: "Full Body Checkup", image: bodycheck, bgColor: "#FEF3C7", screen: "Consult" },
+    { name: "Order Medicine", image: medicineimg, bgColor: "#BBF7D0", screen: "Medicine" },
+    { name: "Skin Care", image: skincare, bgColor: "#FBCFE8", screen: "Medicine" },
+    { name: "X-Ray, MRI", image: xray, bgColor: "#FDE68A", screen: "Consult" },
+    { name: "Lab Test", image: labtest, bgColor: "#C4B5FD", screen: "Labtest" },
+  ], []);
 
-
-  const services = [
-    { name: "Online Consultations", image: consultant, bg: "bg-blue-400", screen: "Consult" },
-    { name: "Full Body Checkup", image: bodycheck, bg: "bg-amber-100", screen: "Consult" },
-    { name: "Order Medicine", image: medicineimg, bg: "bg-green-200", screen: "Medicine" },
-    { name: "Skin Care", image: skincare, bg: "bg-pink-200", screen: "Medicine" },
-    { name: "X-Ray, MRI", image: xray, bg: "bg-yellow-200", screen: "Consult" },
-    { name: "Lab Test", image: labtest, bg: "bg-violet-400", screen: "Labtest" },
-  ];
-
-  // useEffect(() => {
-  //   const unsubscribe = auth().onAuthStateChanged((authenticatedUser) => {
-  //     if (authenticatedUser) {
-  //       setUser(authenticatedUser);
-  //     } else {
-  //       navigation.replace('Login'); // Redirect if no user
-  //     }
-  //   });
-
-  //   return unsubscribe; // Cleanup on unmount
-  // }, []);
-
-  // if (!user) return null; // Avoid rendering UI before user check is complete
+  const openDrawer = useCallback(() => {
+    navigation.openDrawer();
+  }, [navigation]);
 
   return (
     <ThemedView style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()} style={styles.drawerToggle}>
+        <TouchableOpacity onPress={openDrawer} style={styles.drawerToggle}>
           <Ionicons name="menu" size={30} color="black" />
         </TouchableOpacity>
         <ThemedText style={styles.headerTitle}>Ayuryuj HealthApp</ThemedText>
       </View>
 
-      {/* Scrollable Content */}
       <ScrollView contentContainerStyle={styles.mainContent}>
-        <View className='flex flex-row flex-wrap justify-center'>
+        <View style={styles.serviceContainer}>
           {services.map((service, index) => (
             <TouchableOpacity 
               key={index} 
-              className={`w-44 rounded-lg m-2 overflow-hidden h-36 flex justify-center items-center ${service.bg}`} 
+              style={[styles.serviceItem, { backgroundColor: service.bgColor }]} 
               onPress={() => navigation.navigate(service.screen)}
             >
-              <Text className='text-center text-lg font-bold'>{service.name}</Text>
-              <Image source={service.image} className='w-32 h-24 mt-2' resizeMode='contain' />
+              <Text style={styles.serviceText}>{service.name}</Text>
+              <Image source={service.image} style={styles.serviceImage} resizeMode='contain' />
             </TouchableOpacity>
           ))}
         </View>
 
-        {/* Promotional Banner */}
         <TouchableOpacity>
-          <Image source={banner} className='w-full h-40 rounded-lg mt-4' resizeMode='cover' />
+          <Image source={banner} style={styles.bannerImage} resizeMode='cover' />
         </TouchableOpacity>
       </ScrollView>
     </ThemedView>
@@ -103,5 +85,35 @@ const styles = StyleSheet.create({
   mainContent: {
     padding: 16,
   },
+  serviceContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  serviceItem: {
+    width: 160,
+    height: 140,
+    margin: 8,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  serviceText: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  serviceImage: {
+    width: 100,
+    height: 80,
+    marginTop: 8,
+  },
+  bannerImage: {
+    width: '100%',
+    height: 160,
+    borderRadius: 12,
+    marginTop: 16,
+  },
 });
-
