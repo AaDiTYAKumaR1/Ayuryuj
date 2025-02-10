@@ -1,6 +1,6 @@
 import { StyleSheet, Image, Platform, View, Pressable } from 'react-native';
 
-import { Collapsible } from '@/components/Collapsible';
+import { Collapsible } from '@/components/CustomDrawerContent';
 import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';

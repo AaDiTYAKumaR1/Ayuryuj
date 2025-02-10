@@ -8,14 +8,30 @@ import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import DrawerNavigator from './DrawerNavigator';
+import { SafeAreaProvider } from 'react-native-safe-area-context';  
 import '../global.css'
-
+import CustomDrawerContent from '@/components/CustomDrawer';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import DoctorDetails from './DoctorDetails';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Login from './Login';
 
 SplashScreen.preventAutoHideAsync();
+const Drawer = createDrawerNavigator();
+
+
+function DrawerNavigator() {
+  return (
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      <Drawer.Screen name="index" options={{ title: 'Home' }} />
+      <Drawer.Screen name="(drawer)/settings" options={{ title: 'Settings' }} />
+      <Drawer.Screen name="(drawer)/about" options={{ title: 'About Us' }} />
+    </Drawer.Navigator>
+  );
+}
+
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -40,6 +56,8 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
         <Stack.Screen name="DoctorDetails" />
+        <Stack.Screen name='createDrawerNavigator'/>
+        <Stack.Screen name="Login"  />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

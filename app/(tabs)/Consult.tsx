@@ -5,8 +5,9 @@ import {
   FlatList,
   TouchableOpacity,
   Button,
+  TextInput,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import logo from "../../assets/images/logo1.png";
@@ -34,15 +35,24 @@ const doctors = [
     id: "3",
     name: "Dr. Subhash Gupta",
     specialty: "Dentist",
-    epx: 12,
+    epx: 8,
     qualification: "BDS, MDS",
-    about: "Dr. Rahul Verma specializes in dental surgeries...",
+    about: "Dr. Subhash Gupta specializes in dental surgeries...",
     image: require("../../assets/images/Doctor3.jpg"),
   },
 ];
 
 export default function Consult() {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("experience");
+
+  const filteredDoctors = doctors
+    .filter((doctor) =>
+      doctor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor.specialty.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => (sortOption === "experience" ? b.epx - a.epx : 0));
 
   return (
     <View className="flex-1 bg-gray-100 p-2">
@@ -50,9 +60,17 @@ export default function Consult() {
         <Text className="text-2xl font-bold text-center text-gray-800 mb-4">
           Consult a Doctor
         </Text>
+        
+        {/* Search Bar */}
+        <TextInput
+          className="bg-white p-3 rounded-xl shadow-md mb-4"
+          placeholder="Search by name or specialty"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
 
         <FlatList
-          data={doctors}
+          data={filteredDoctors}
           keyExtractor={(item) => item.id}
           initialNumToRender={4}
           renderItem={({ item }) => (
@@ -80,14 +98,24 @@ export default function Consult() {
                   <Text className="text-gray-600">{item.specialty}</Text>
                   <Text className="text-gray-700">Qualification: {item.qualification}</Text>
                 </View>
-                  <View className="flex mt-2 space-y-2">
-                    <Button color="#f2a2c3" title="Know More" onPress={() => navigation.navigate("DoctorDetails", { doctor: item })} />
-                    <Button color="#323232" title="Consult" />
-                  </View>
+                <View className="flex mt-2 space-y-2">
+                  <Button color="#f2a2c3" title="Know More" onPress={() => navigation.navigate("DoctorDetails", { doctor: item })} />
+                  <Button color="#323232" title="Consult" />
+                </View>
               </View>
             </TouchableOpacity>
           )}
         />
+
+        {/* Sort Option */}
+        <View className="flex flex-row justify-between p-4">
+          <Text className="text-gray-700">Sort by: </Text>
+          <Button
+            title="Experience"
+            color={sortOption === "experience" ? "#4CAF50" : "#888"}
+            onPress={() => setSortOption("experience")}
+          />
+        </View>
       </SafeAreaView>
     </View>
   );

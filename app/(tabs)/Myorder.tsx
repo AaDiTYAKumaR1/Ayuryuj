@@ -3,7 +3,7 @@ import React from 'react';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
-import { Collapsible } from '@/components/Collapsible';
+import { Collapsible } from '@/components/CustomDrawerContent';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 const orders = [
   { id: '1', name: 'Paracetamol', status: 'Delivered', date: 'Feb 6, 2025' },
