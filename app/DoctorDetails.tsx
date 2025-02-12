@@ -19,7 +19,7 @@ export default function DoctorDetails() {
         <Text className="text-gray-800 mt-4">{doctor.about}</Text>
         
         <View className="mt-6 space-y-3">
-          <Button color="#f2a2c3" title="Book an Appointment" />
+          <Button color="#2196BD" title="Book an Appointment" />
           {/* <Button color="#323232" title="Go Back" onPress={() => navigation.goBack()} /> */}
         </View>
       </SafeAreaView>

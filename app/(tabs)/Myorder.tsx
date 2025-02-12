@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router';
 export default function UserProfileScreen() {
   const { user } = useUser();
   const router = useRouter();
-  console.log(user)
+  // console.log(user)
 
   return (
     <ThemedView style={styles.container}>

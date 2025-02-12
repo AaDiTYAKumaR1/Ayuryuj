@@ -2,7 +2,7 @@ import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { View, Text,Image, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
-
+import { useUser } from "@clerk/clerk-expo";
 export default function SignInPage() {
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();

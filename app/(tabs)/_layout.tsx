@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform, View } from 'react-native';
-
+import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
@@ -15,13 +15,13 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: 'black',
+        tabBarActiveTintColor: '#2196BD',
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
-            position: 'absolute', // Makes the bar float
+            position: 'absolute',
           },
           default: {},
         }),
@@ -44,10 +44,23 @@ export default function TabLayout() {
         name="Consult"
         options={{
           title: 'Consult',
-          tabBarIcon: ({ color }) => (
-              <Ionicons size={28} name="heart-circle-sharp" color="red" 
-                />
-            )
+          tabBarIcon: ({ focused }) => {
+            return (
+              
+            <View style ={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 50,
+              height: 50,
+              borderRadius: 25,
+              top: -10,
+              backgroundColor: "#FD7B5A",
+              
+            }}>
+
+              <FontAwesome name="heartbeat" size={24} color="#fff" />
+            </View>
+            )}
           }}
           />
       <Tabs.Screen
@@ -60,7 +73,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="Myorder"
         options={{
-          title: 'My Order',
+          title: 'User',
           tabBarIcon: ({ color }) => <Ionicons size={28} name="bag" color={color} />,
         }}
       />

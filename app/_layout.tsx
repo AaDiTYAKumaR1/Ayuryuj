@@ -17,9 +17,14 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  const [loaded, error] = useFonts({
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf')
   });
+
+  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
 
   useEffect(() => {
     if (loaded) {

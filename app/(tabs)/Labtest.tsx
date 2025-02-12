@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+    padding:12,
     marginBottom: 10,
   },
   imageContainer: {
